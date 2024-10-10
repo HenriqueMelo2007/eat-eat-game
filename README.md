@@ -1,10 +1,10 @@
-# Title
+# EAT-EAT GAME
 
-![Project Preview](assets/preview.jpg)
+![Project Preview](assets/preview.png)
+
+## [SCHEMATIC VIEW HERE!](assets/schematic.pdf)
 
 ## Project Description
-
-Description here! lorem ipsum dolor 
 
 ## Components
 
@@ -15,7 +15,7 @@ Description here! lorem ipsum dolor
 - 
 
 
-> Project Status: concluded
+> Project Status: development
 
 
 ## Installation Guide
@@ -45,7 +45,7 @@ To clone this repository to your local machine, follow these steps:
 2. **Clone Repository**: Use the following command to clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/your-repository-name.git
+   git clone https://github.com/HenriqueMelo2007/eat-eat-game.git
 
 
 ## License
