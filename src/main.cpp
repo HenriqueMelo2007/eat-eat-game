@@ -24,9 +24,9 @@ int score = 0;
 void buttonPressed(int BTN);
 void drawChar(int col, int row, int character);
 void eatEat(int BTN);
-void verifyPositions();
+void verifyCollision();
 void showScore();
-void respawnFruit();
+void respawn(int* positions);
 int randomBinary();
 int randomZeroOrFifteen();
 
@@ -159,14 +159,14 @@ void eatEat(int BTN)
     break;
   }
 
-  verifyPositions();
+  verifyCollision();
 }
 
-void verifyPositions()
+void verifyCollision()
 {
   if (eatEatPosition[0] == fruitPosition[0] && eatEatPosition[1] == fruitPosition[1])
   {
-    respawnFruit();
+    respawn(fruitPosition);
     score++;
   }
   if (eatEatPosition[0] == ghostPosition[0] && eatEatPosition[1] == ghostPosition[1])
@@ -188,10 +188,10 @@ void showScore()
   delay(4000);
 }
 
-void respawnFruit()
+void respawn(int* positions)
 {
-  fruitPosition[0] = randomZeroOrFifteen();
-  fruitPosition[1] = randomBinary();
+  positions[0] = randomZeroOrFifteen();
+  positions[1] = randomBinary();
 }
 
 int randomBinary()
