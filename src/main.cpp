@@ -16,13 +16,18 @@ int lastValues[4] = {0, 0, 0, 0};
 int eatEatPosition[2] = {7, 0};
 int eatEatSprite = 1;
 
-int fruitPosition[2] = {0, 0};
-int ghostPosition[2] = {15, 1};
+int fruitPosition[2];
+int ghostPosition[2];
+
+int fruitDirection;
+int ghostDirection;
+
+unsigned long fruitLastMoveTime = 0;
+unsigned long ghostLastMoveTime = 0;
+
+const int moveInterval = 200;
 
 int score = 0;
-
-int fruitDirection = 0;
-int ghostDirection = 0;
 
 void buttonPressed(int BTN);
 void drawChar(int col, int row, int character);
@@ -32,7 +37,7 @@ void showScore();
 void respawn(int *positions, int &direction);
 int randomBinary();
 int randomZeroOrFifteen();
-void automaticMovimentation(int *positions, int &direction, int sprite);
+void automaticMovimentation(int *positions, int &direction, int sprite, unsigned long &lastMoveTime);
 
 void setup()
 {
@@ -53,6 +58,9 @@ void setup()
 
   lcd.clear();
 
+  respawn(fruitPosition, fruitDirection);
+  respawn(ghostPosition, ghostDirection);
+
   int seed = analogRead(0) + millis();
   randomSeed(seed);
 }
@@ -70,8 +78,8 @@ void loop()
     drawChar(fruitPosition[0], fruitPosition[1], 5);
     drawChar(ghostPosition[0], ghostPosition[1], 6);
 
-    automaticMovimentation(fruitPosition, fruitDirection, 5);
-    automaticMovimentation(ghostPosition, ghostDirection, 6);
+    automaticMovimentation(fruitPosition, fruitDirection, 5, fruitLastMoveTime);
+    automaticMovimentation(ghostPosition, ghostDirection, 6, ghostLastMoveTime);
   }
   else
   {
@@ -216,39 +224,44 @@ int randomZeroOrFifteen()
   return random(0, 2) * 15;
 }
 
-void automaticMovimentation(int *positions, int &direction, int sprite)
+void automaticMovimentation(int *positions, int &direction, int sprite, unsigned long &lastMoveTime)
 {
-  lcd.setCursor(positions[0], positions[1]);
-  lcd.print(" ");
+  unsigned long currentMillis = millis();
 
-  switch (direction)
+  if (currentMillis - lastMoveTime >= moveInterval)
   {
-  case 0:
-    if (positions[0] == 0)
-      respawn(positions, direction);
-    else
-    {
-      positions[0] = positions[0] - 1;
-      verifyCollision();
-    }
-    break;
+    lastMoveTime = currentMillis;
 
-  case 1:
-    if (positions[0] == 15)
-      respawn(positions, direction);
-    else
-    {
-      positions[0] = positions[0] + 1;
-      verifyCollision();
-    }
-    break;
+    lcd.setCursor(positions[0], positions[1]);
+    lcd.print(" ");
 
-  default:
-    break;
+    switch (direction)
+    {
+    case 0:
+      if (positions[0] == 0)
+        respawn(positions, direction);
+      else
+      {
+        positions[0] = positions[0] - 1;
+        verifyCollision();
+      }
+      break;
+
+    case 1:
+      if (positions[0] == 15)
+        respawn(positions, direction);
+      else
+      {
+        positions[0] = positions[0] + 1;
+        verifyCollision();
+      }
+      break;
+
+    default:
+      break;
+    }
+
+    lcd.setCursor(positions[0], positions[1]);
+    lcd.write(sprite);
   }
-
-  lcd.setCursor(positions[0], positions[1]);
-  lcd.write(sprite);
-
-  delay(300);
 }
