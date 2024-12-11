@@ -21,14 +21,18 @@ int ghostPosition[2] = {15, 1};
 
 int score = 0;
 
+int fruitDirection = 0;
+int ghostDirection = 0;
+
 void buttonPressed(int BTN);
 void drawChar(int col, int row, int character);
 void eatEat(int BTN);
 void verifyCollision();
 void showScore();
-void respawn(int* positions);
+void respawn(int *positions, int &direction);
 int randomBinary();
 int randomZeroOrFifteen();
+void automaticMovimentation(int *positions, int &direction, int sprite);
 
 void setup()
 {
@@ -50,7 +54,7 @@ void setup()
   lcd.clear();
 
   int seed = analogRead(0) + millis();
-  randomSeed(seed);                    
+  randomSeed(seed);
 }
 
 void loop()
@@ -65,6 +69,9 @@ void loop()
     drawChar(eatEatPosition[0], eatEatPosition[1], eatEatSprite);
     drawChar(fruitPosition[0], fruitPosition[1], 5);
     drawChar(ghostPosition[0], ghostPosition[1], 6);
+
+    automaticMovimentation(fruitPosition, fruitDirection, 5);
+    automaticMovimentation(ghostPosition, ghostDirection, 6);
   }
   else
   {
@@ -166,7 +173,7 @@ void verifyCollision()
 {
   if (eatEatPosition[0] == fruitPosition[0] && eatEatPosition[1] == fruitPosition[1])
   {
-    respawn(fruitPosition);
+    respawn(fruitPosition, fruitDirection);
     score++;
   }
   if (eatEatPosition[0] == ghostPosition[0] && eatEatPosition[1] == ghostPosition[1])
@@ -188,10 +195,15 @@ void showScore()
   delay(4000);
 }
 
-void respawn(int* positions)
+void respawn(int *positions, int &direction)
 {
   positions[0] = randomZeroOrFifteen();
   positions[1] = randomBinary();
+
+  if (positions[0] == 0)
+    direction = 1;
+  else
+    direction = 0;
 }
 
 int randomBinary()
@@ -202,4 +214,41 @@ int randomBinary()
 int randomZeroOrFifteen()
 {
   return random(0, 2) * 15;
+}
+
+void automaticMovimentation(int *positions, int &direction, int sprite)
+{
+  lcd.setCursor(positions[0], positions[1]);
+  lcd.print(" ");
+
+  switch (direction)
+  {
+  case 0:
+    if (positions[0] == 0)
+      respawn(positions, direction);
+    else
+    {
+      positions[0] = positions[0] - 1;
+      verifyCollision();
+    }
+    break;
+
+  case 1:
+    if (positions[0] == 15)
+      respawn(positions, direction);
+    else
+    {
+      positions[0] = positions[0] + 1;
+      verifyCollision();
+    }
+    break;
+
+  default:
+    break;
+  }
+
+  lcd.setCursor(positions[0], positions[1]);
+  lcd.write(sprite);
+
+  delay(300);
 }
