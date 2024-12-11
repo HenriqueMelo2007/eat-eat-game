@@ -1,5 +1,5 @@
 #include <LiquidCrystal.h>
-#include <sprites.h>
+#include "sprites.h"
 #include <stdint.h>
 
 #define upButton 6
@@ -10,9 +10,18 @@
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 bool start;
+
 int lastValues[4] = {0, 0, 0, 0};
 
+int eatEatPosition[2] = {7, 0};
+int eatEatSprite = 1;
+
+int fruitPosition[2] = {0, 0};
+int bombPosition[2] = {15, 1};
+
 void buttonPressed(int BTN);
+void drawChar(int col, int row, int character);
+void eatEat(int BTN);
 
 void setup()
 {
@@ -43,7 +52,9 @@ void loop()
 
   if (start)
   {
-    lcd.clear();
+    drawChar(eatEatPosition[0], eatEatPosition[1], eatEatSprite);
+    drawChar(fruitPosition[0], fruitPosition[1], 5);
+    drawChar(bombPosition[0], bombPosition[1], 6);
   }
   else
   {
@@ -64,8 +75,49 @@ void buttonPressed(int BTN)
 
   if (input == 1 && lastValues[BTN - 6] == 0)
   {
+    lcd.clear();
     start = true;
   }
 
   lastValues[BTN - 6] = input;
+
+  eatEat(BTN);
+}
+
+void drawChar(int col, int row, int character)
+{
+  lcd.setCursor(col, row);
+  lcd.write(character);
+}
+
+void eatEat(int BTN)
+{
+  int specificBTN = BTN - 6;
+
+  lcd.setCursor(eatEatPosition[0], eatEatPosition[1]);
+  lcd.print(' ');
+
+  switch (specificBTN)
+  {
+  case 0:
+    eatEatPosition[1] = specificBTN;
+    break;
+
+  case 1:
+    eatEatPosition[1] = specificBTN;
+    break;
+
+  case 2:
+    if (eatEatPosition[0] < 15)
+      eatEatPosition[0] = eatEatPosition[0] + 1;
+    break;
+
+  case 3:
+    if (eatEatPosition[0] > 0)
+      eatEatPosition[0] = eatEatPosition[0] - 1;
+    break;
+
+  default:
+    break;
+  }
 }
