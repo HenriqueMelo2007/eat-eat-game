@@ -77,11 +77,10 @@ void buttonPressed(int BTN)
   {
     lcd.clear();
     start = true;
+    eatEat(BTN);
   }
 
   lastValues[BTN - 6] = input;
-
-  eatEat(BTN);
 }
 
 void drawChar(int col, int row, int character)
@@ -109,12 +108,41 @@ void eatEat(int BTN)
 
   case 2:
     if (eatEatPosition[0] < 15)
+    {
       eatEatPosition[0] = eatEatPosition[0] + 1;
+      switch (eatEatSprite)
+      {
+      case 1:
+        eatEatSprite = 2;
+        break;
+      case 2:
+        eatEatSprite = 1;
+        break;
+      default:
+        eatEatSprite = 1;
+        break;
+      }
+    }
+
     break;
 
   case 3:
     if (eatEatPosition[0] > 0)
+    {
       eatEatPosition[0] = eatEatPosition[0] - 1;
+      switch (eatEatSprite)
+      {
+      case 3:
+        eatEatSprite = 4;
+        break;
+      case 4:
+        eatEatSprite = 3;
+        break;
+      default:
+        eatEatSprite = 3;
+        break;
+      }
+    }
     break;
 
   default:
