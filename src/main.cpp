@@ -26,6 +26,9 @@ void drawChar(int col, int row, int character);
 void eatEat(int BTN);
 void verifyPositions();
 void showScore();
+void respawnFruit();
+int randomBinary();
+int randomZeroOrFifteen();
 
 void setup()
 {
@@ -45,6 +48,9 @@ void setup()
   lcd.createChar(6, ghost);
 
   lcd.clear();
+
+  int seed = analogRead(0) + millis();
+  randomSeed(seed);                    
 }
 
 void loop()
@@ -160,6 +166,7 @@ void verifyPositions()
 {
   if (eatEatPosition[0] == fruitPosition[0] && eatEatPosition[1] == fruitPosition[1])
   {
+    respawnFruit();
     score++;
   }
   if (eatEatPosition[0] == ghostPosition[0] && eatEatPosition[1] == ghostPosition[1])
@@ -169,7 +176,8 @@ void verifyPositions()
   }
 }
 
-void showScore() {
+void showScore()
+{
   lcd.clear();
   lcd.setCursor(3, 0);
   lcd.print("GAME OVER");
@@ -178,4 +186,20 @@ void showScore() {
   lcd.print("SCORE: ");
   lcd.print(score);
   delay(4000);
+}
+
+void respawnFruit()
+{
+  fruitPosition[0] = randomZeroOrFifteen();
+  fruitPosition[1] = randomBinary();
+}
+
+int randomBinary()
+{
+  return random(0, 2);
+}
+
+int randomZeroOrFifteen()
+{
+  return random(0, 2) * 15;
 }
