@@ -17,11 +17,15 @@ int eatEatPosition[2] = {7, 0};
 int eatEatSprite = 1;
 
 int fruitPosition[2] = {0, 0};
-int bombPosition[2] = {15, 1};
+int ghostPosition[2] = {15, 1};
+
+int score = 0;
 
 void buttonPressed(int BTN);
 void drawChar(int col, int row, int character);
 void eatEat(int BTN);
+void verifyPositions();
+void showScore();
 
 void setup()
 {
@@ -54,7 +58,7 @@ void loop()
   {
     drawChar(eatEatPosition[0], eatEatPosition[1], eatEatSprite);
     drawChar(fruitPosition[0], fruitPosition[1], 5);
-    drawChar(bombPosition[0], bombPosition[1], 6);
+    drawChar(ghostPosition[0], ghostPosition[1], 6);
   }
   else
   {
@@ -148,4 +152,30 @@ void eatEat(int BTN)
   default:
     break;
   }
+
+  verifyPositions();
+}
+
+void verifyPositions()
+{
+  if (eatEatPosition[0] == fruitPosition[0] && eatEatPosition[1] == fruitPosition[1])
+  {
+    score++;
+  }
+  if (eatEatPosition[0] == ghostPosition[0] && eatEatPosition[1] == ghostPosition[1])
+  {
+    showScore();
+    start = false;
+  }
+}
+
+void showScore() {
+  lcd.clear();
+  lcd.setCursor(3, 0);
+  lcd.print("GAME OVER");
+  lcd.write(6);
+  lcd.setCursor(3, 1);
+  lcd.print("SCORE: ");
+  lcd.print(score);
+  delay(4000);
 }
