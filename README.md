@@ -14,6 +14,8 @@ The Eat-Eat game was developed using the <img src="assets/platformio-icon.webp" 
 
 The game's code is organized into multiple files to improve maintainability and readability. Custom sprites for the game elements (the player, fruits, and ghosts) are defined in a separate header (sprites.h) and implementation file (sprites.cpp), ensuring modularity. The main game logic is implemented in main.cpp, which handles button inputs, character movement, collision detection, and game state transitions. Randomization of fruit and ghost positions is achieved through seeding with analog readings and time functions, ensuring unpredictable gameplay. The entire system utilizes a straightforward state machine approach to transition between the initial screen, active gameplay, and game over states.
 
+## [TINKERCAD CIRCUIT LINK HERE!](https://www.tinkercad.com/things/lLA7fAvHGTo-eat-eat-game?sharecode=Q34wcR9KC4aOSdz1ETww-zLMGEiHp5iu2lTeHM9l86Q)
+
 ## [SCHEMATIC VIEW HERE!](assets/schematic.pdf)
 
 ## Components🔌
